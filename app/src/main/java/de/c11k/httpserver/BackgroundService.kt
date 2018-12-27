@@ -23,13 +23,12 @@ class BackgroundService : Service() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
 
-        val notification: Notification.Builder = Notification.Builder(this)
+        val notification: Notification.Builder = Notification.Builder(this, "1")
         notification.setSmallIcon(R.mipmap.ic_launcher)
         notification.setContentTitle("running")
         notification.setContentText("httpserver is running in background")
         notification.setShowWhen(true)
         notification.setContentIntent(pendingIntent)
-        notification.setChannelId("1")
 
         startForeground(1, notification.build())
     }
