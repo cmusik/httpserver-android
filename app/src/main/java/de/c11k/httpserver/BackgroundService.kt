@@ -31,7 +31,7 @@ class BackgroundService : Service() {
         notificationManager.createNotificationChannel(channel)
 
         val notification: Notification.Builder = Notification.Builder(this, "1")
-        notification.setSmallIcon(R.mipmap.ic_launcher)
+        notification.setSmallIcon(R.drawable.ic_stat_name)
         notification.setContentTitle("running")
         notification.setContentText("httpserver is running on port $port in background")
         notification.setShowWhen(true)
