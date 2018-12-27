@@ -5,21 +5,35 @@ import android.content.Intent
 import android.util.Log
 import fi.iki.elonen.NanoHTTPD
 
-class Webserver(private val context: Context, host: String, port: Int) : NanoHTTPD("127.0.0.1", port) {
+class Webserver(private val context: Context?, host: String, port: Int) : NanoHTTPD(host, port) {
 
-    private val TAG = Webserver::class.java.name
+    private val tag = Webserver::class.java.name
 
     override fun serve(session: IHTTPSession?): Response {
-        val path = session!!.uri.toString().substring(1).replace("[^a-z]", "", true)
+        val path = fixPath(session!!.uri.toString())
 
-        val intent = Intent() as Intent?
+        val ret : Response
 
-        val action = "de.c11k.httpserver.message.$path"
+        if (path != "") {
+            val intent = Intent() as Intent?
 
-        Log.d(TAG, "Broadcasting action $action")
-        intent!!.action = action
-        context.sendBroadcast(intent)
+            val action = "de.c11k.httpserver.message.$path"
 
-        return newFixedLengthResponse("got request\n")
+            Log.d(tag, "Broadcasting action $action")
+            intent!!.action = action
+            context!!.sendBroadcast(intent)
+
+            ret = newFixedLengthResponse("got request\n")
+        }
+        else {
+            Log.d(tag, "got empty request, no intent sent")
+            ret = newFixedLengthResponse("got empty request, no intent sent")
+        }
+
+        return ret
+    }
+
+    fun fixPath(str : String) : String {
+        return str.substring(1).replace("[^a-z0-9]+".toRegex(RegexOption.IGNORE_CASE), "")
     }
 }
