@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+            android:defaultValue="8080"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Port" android:key="port" tools:digits="0123456789" android:inputType="phone"/>
+    <SwitchPreference
+            android:defaultValue="true"
+            android:title="Start on boot" android:key="start_on_boot"/>
+</PreferenceScreen>
