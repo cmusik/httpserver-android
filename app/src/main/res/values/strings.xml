@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">httpserver</string>
+    <string name="action_settings">Settings</string>
+    <string name="helptext">This app will listen on port $port on localhost for new requests. \nEvery new request will
+        create a BroadcastIntent with the action \'de.c11k.httpserver.message.$path\'.\n\nSo if you request
+        http://127.0.0.1/foobar the intents action will be \'de.c11k.httpserver.message.foobar\'. You can then use this
+        in tasker \'Event -> Intent Received\' to run a task.
+    </string>
+    <string name="title_activity_settings">Settings</string>
+</resources>
