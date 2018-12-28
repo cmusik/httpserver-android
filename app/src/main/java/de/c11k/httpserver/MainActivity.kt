@@ -1,6 +1,7 @@
 package de.c11k.httpserver
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -32,7 +33,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun startServer() {
         val intent = Intent(this, BackgroundService::class.java)
-        startForegroundService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        }
+        else {
+            startService(intent)
+        }
     }
 
     private fun stopServer() {

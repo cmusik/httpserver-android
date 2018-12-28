@@ -3,6 +3,7 @@ package de.c11k.httpserver
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.preference.PreferenceManager
@@ -25,12 +26,19 @@ class BackgroundService : Service() {
 
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val notification : Notification.Builder
 
-        val channel = NotificationChannel("1", getString(R.string.service), NotificationManager.IMPORTANCE_DEFAULT)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("1", getString(R.string.service), NotificationManager.IMPORTANCE_DEFAULT)
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
 
-        val notification: Notification.Builder = Notification.Builder(this, "1")
+            notification = Notification.Builder(this, "1")
+        }
+        else {
+            notification = Notification.Builder(this)
+        }
+
         notification.setSmallIcon(R.drawable.ic_stat_name)
         notification.setContentTitle("running")
         notification.setContentText("httpserver is running on port $port in background")
