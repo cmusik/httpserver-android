@@ -26,7 +26,7 @@ class BackgroundService : Service() {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val channel = NotificationChannel("1", "main", NotificationManager.IMPORTANCE_DEFAULT)
+        val channel = NotificationChannel("1", getString(R.string.service), NotificationManager.IMPORTANCE_DEFAULT)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
 
