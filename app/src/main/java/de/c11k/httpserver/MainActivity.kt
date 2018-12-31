@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateText() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val port : String? = prefs.getString("port", "1234")
+        val port : String? = prefs.getString("port", "8080")
 
         var text = getString(R.string.helptext)
         text = text.replace("\$port", port!!.toString())
