@@ -58,7 +58,7 @@ class BackgroundService : Service() {
             }
             isRunning = true
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun stopService(name: Intent?): Boolean {
