@@ -11,4 +11,7 @@
     <string name="restart_service">Restart service</string>
     <string name="start_service">Start service</string>
     <string name="stop_service">Stop service</string>
+    <string name="copy_url">Copy URL</string>
+    <string name="copy_intent">Copy intent</string>
+    <string name="copy_to_clipboard">Copied to clipboard</string>
 </resources>

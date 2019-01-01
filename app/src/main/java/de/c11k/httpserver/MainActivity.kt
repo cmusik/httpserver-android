@@ -1,6 +1,8 @@
 package de.c11k.httpserver
 
 import android.app.ActivityManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -9,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +30,12 @@ class MainActivity : AppCompatActivity() {
 
         updateText()
         startServer()
+    }
+
+    private fun copyToClipboard(str : String) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.primaryClip = ClipData.newPlainText(str, str)
+        Toast.makeText(this, getString(R.string.copy_to_clipboard), Toast.LENGTH_SHORT).show()
     }
 
     private fun checkServiceState() {
@@ -57,6 +66,14 @@ class MainActivity : AppCompatActivity() {
         text = text.replace("\$port", port!!.toString())
 
         helptext.text = text
+
+        copy_intent.setOnClickListener {
+            copyToClipboard("de.c11k.httpserver.message.foobar")
+        }
+
+        copy_url.setOnClickListener {
+            copyToClipboard("http://127.0.0.1:$port/foobar")
+        }
     }
 
     private fun startServer() {
