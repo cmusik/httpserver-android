@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity"/>
 
         <receiver android:name=".AutoStart">
             <intent-filter>
