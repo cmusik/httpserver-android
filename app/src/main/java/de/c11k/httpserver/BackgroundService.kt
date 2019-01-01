@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.widget.Toast
 import androidx.preference.PreferenceManager
 import java.net.BindException
 
@@ -59,11 +60,16 @@ class BackgroundService : Service() {
             server = Webserver(this, "127.0.0.1", port)
             try {
                 server!!.start(5)
+                isRunning = true
             } catch (e : BindException) {
-                Log.d("BackgroundService", "caught exception")
+                Log.d("BackgroundService", "caught exception: $e")
+                Toast.makeText(applicationContext, "$e", Toast.LENGTH_LONG).show()
+                server!!.stop()
+                stopSelf()
+                return START_NOT_STICKY
             }
-            isRunning = true
+            return START_STICKY
         }
-        return START_STICKY
+        return START_NOT_STICKY
     }
 }

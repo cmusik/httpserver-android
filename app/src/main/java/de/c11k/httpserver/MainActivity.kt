@@ -1,14 +1,20 @@
 package de.c11k.httpserver
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,8 +23,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        restart_service.visibility = Button.GONE
+
         updateText()
         startServer()
+    }
+
+    private fun checkServiceState() {
+        doAsync {
+            Thread.sleep(1000)
+            uiThread {
+                Log.d("MainActivity", "running: "+isServiceRunning(BackgroundService::class.java))
+                if (!isServiceRunning(BackgroundService::class.java)) {
+                    restart_service.visibility = Button.VISIBLE
+                    restart_service.setOnClickListener {
+                        stopServer()
+                        startServer()
+                        restart_service.visibility = Button.GONE
+                    }
+                }
+                else {
+                    restart_service.visibility = Button.GONE
+                }
+            }
+        }
     }
 
     private fun updateText() {
@@ -39,11 +67,19 @@ class MainActivity : AppCompatActivity() {
         else {
             startService(intent)
         }
+        checkServiceState()
     }
 
     private fun stopServer() {
         val intent = Intent(this, BackgroundService::class.java)
         stopService(intent)
+    }
+
+    @Suppress("DEPRECATION")
+    fun <T> Context.isServiceRunning(service: Class<T>): Boolean {
+        return (getSystemService(ACTIVITY_SERVICE) as ActivityManager)
+            .getRunningServices(Integer.MAX_VALUE)
+            .any { it -> it.service.className == service.name }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -58,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 1) {
             updateText()
             stopServer()
+            Log.d("MainActivity", "running: "+isServiceRunning(BackgroundService::class.java))
             startServer()
         }
     }
