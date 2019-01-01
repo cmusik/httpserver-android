@@ -82,9 +82,25 @@ class MainActivity : AppCompatActivity() {
             .any { it -> it.service.className == service.name }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (menu == null) {
+            return true
+        }
+        if (isServiceRunning(BackgroundService::class.java)) {
+            menu.findItem(R.id.start_service).isVisible = false
+            menu.findItem(R.id.stop_service).isVisible = true
+        }
+        else {
+            menu.findItem(R.id.start_service).isVisible = true
+            menu.findItem(R.id.stop_service).isVisible = false
+        }
+        return true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+
         return true
     }
 
@@ -104,11 +120,22 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        startActivityForResult(Intent(this, SettingsActivity::class.java), 1)
-
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.action_settings -> {
+                startActivityForResult(Intent(this, SettingsActivity::class.java), 1)
+                return true
+            }
+            R.id.start_service -> {
+                startServer()
+                return true
+            }
+            R.id.stop_service -> {
+                stopServer()
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 }
