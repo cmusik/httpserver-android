@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager
 
 class AutoStart : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent!!.action == Intent.ACTION_BOOT_COMPLETED) {
+        if (intent!!.action == Intent.ACTION_BOOT_COMPLETED || intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
             val serviceIntent = Intent(context, BackgroundService::class.java)
             if (prefs.getBoolean("start_on_boot", true)) {
