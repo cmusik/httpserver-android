@@ -48,6 +48,12 @@ class BackgroundService : Service() {
         startForeground(1, notification.build())
     }
 
+    override fun onDestroy() {
+        Log.d("BackgroundService", "destroy service")
+        server!!.stop()
+        isRunning = false
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (!isRunning) {
             server = Webserver(this, "127.0.0.1", port)
@@ -59,11 +65,5 @@ class BackgroundService : Service() {
             isRunning = true
         }
         return START_STICKY
-    }
-
-    override fun stopService(name: Intent?): Boolean {
-        server!!.stop()
-        isRunning = false
-        return super.stopService(name)
     }
 }
